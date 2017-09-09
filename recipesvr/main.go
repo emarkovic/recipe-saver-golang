@@ -23,6 +23,18 @@ recipe randomizer
 - favorite recipe
 - assign recipe for a day of the week? -> how?
 */
+func recipesHander(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		// "saving" -> creating a new recipe
+	case "GET":
+		// get all recipe
+	case "PATCH":
+		// assign to day of the week
+		// favorite
+	case "DELETE":
+	}
+}
 
 func main() {
 	port := os.Getenv("PORT")
@@ -36,7 +48,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", defaultMsg)
-	// http.HandleFunc("/v1/recipes", recipesHander)
+	http.HandleFunc("/v1/recipes", recipesHander)
 
 	addr := fmt.Sprintf("%s:%s", host, port)
 	fmt.Printf("server is listening at %s...\n", addr)

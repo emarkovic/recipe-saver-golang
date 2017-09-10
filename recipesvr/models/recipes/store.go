@@ -1,5 +1,10 @@
 package recipes
 
+import "errors"
+
+// ErrRecipeNotFound is returned when the requested recipe is not found in the store.
+var ErrRecipeNotFound = errors.New("recipe not found")
+
 // Store represents an abstract store for model.Recipe objects
 // This interface is used by the HTTP handlers to insert new recipes,
 // get previously inserted recipes and modify and delete inserted recipes.

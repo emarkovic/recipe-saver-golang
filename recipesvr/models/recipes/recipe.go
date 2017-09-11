@@ -1,5 +1,7 @@
 package recipes
 
+import "time"
+
 // Day type represents an int
 type Day int
 
@@ -19,7 +21,12 @@ type RecipeID string
 
 // Recipe represents a recipe in the database
 type Recipe struct {
-	//what goes in here exactly?
+	ID        RecipeID  `json:"id" bson:"_id"`
+	URL       string    `json:"url"`
+	Deleted   bool      `json:"deleted"`
+	Day       Day       `json:"day, omitempty" bson:",omitempty"`
+	CreatedAt time.Time `json:"createdAt"`
+	// CreatorID users.UserID `json:"creatorId"`
 }
 
 // NewRecipe represents a user saving a new recipe

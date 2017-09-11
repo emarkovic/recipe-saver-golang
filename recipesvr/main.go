@@ -39,7 +39,7 @@ func recipesHander(w http.ResponseWriter, r *http.Request) {
 
 // create a user
 func usersHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != "POST" { // create a new user
 		http.Error(w, "invalid request method", http.StatusBadRequest)
 		return
 	}

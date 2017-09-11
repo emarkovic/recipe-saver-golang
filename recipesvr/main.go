@@ -37,6 +37,14 @@ func recipesHander(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// create a user
+func usersHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "invalid request method", http.StatusBadRequest)
+		return
+	}
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if len(port) == 0 {

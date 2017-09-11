@@ -18,6 +18,8 @@ func NewMongoStore(sessionID *mgo.Session) *MongoStore {
 	}
 }
 
+//Insert inserts a new NewUser into the store
+//and returns a User with a newly-assigned ID
 func (ms *MongoStore) Insert(newUser *NewUser) (*User, error) {
 	return nil, nil
 }

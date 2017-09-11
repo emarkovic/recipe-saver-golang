@@ -1,6 +1,10 @@
 package recipes
 
-import "time"
+import (
+	"time"
+
+	"github.com/recipe-saver-golang/recipesvr/models/users"
+)
 
 // Day type represents an int
 type Day int
@@ -21,12 +25,12 @@ type RecipeID string
 
 // Recipe represents a recipe in the database
 type Recipe struct {
-	ID        RecipeID  `json:"id" bson:"_id"`
-	URL       string    `json:"url"`
-	Deleted   bool      `json:"deleted"`
-	Day       Day       `json:"day, omitempty" bson:",omitempty"`
-	CreatedAt time.Time `json:"createdAt"`
-	// CreatorID users.UserID `json:"creatorId"`
+	ID        RecipeID     `json:"id" bson:"_id"`
+	URL       string       `json:"url"`
+	Deleted   bool         `json:"deleted"`
+	Day       Day          `json:"day, omitempty" bson:",omitempty"`
+	CreatedAt time.Time    `json:"createdAt"`
+	CreatorID users.UserID `json:"creatorId"`
 }
 
 // NewRecipe represents a user saving a new recipe
@@ -42,6 +46,11 @@ type RecipeUpdates struct {
 }
 
 // ToRecipe converts a NewRecipe to a Recipe
-func (nr *NewRecipe) ToRecipe() *Recipe {
-	return &Recipe{}
+func (nr *NewRecipe) ToRecipe(id users.UserID) *Recipe {
+	return &Recipe{
+		URL:       nr.RecipeURL,
+		Deleted:   false,
+		CreatedAt: time.Now(),
+		CreatorID: id,
+	}
 }

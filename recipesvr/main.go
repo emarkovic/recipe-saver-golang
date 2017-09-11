@@ -56,6 +56,11 @@ func main() {
 		host = "localhost"
 	}
 
+	// ctx := &handlers.Context{
+	// 	UserStore: users.NewMongoStore(mgoSID),
+	// 	RecipeStore: recipes.NewMongoStore(mgoSID),
+	// }
+
 	http.HandleFunc("/", defaultMsg)
 	http.HandleFunc("/v1/recipes", recipesHander)
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/info344-in-class/tasksvr/handlers"
+	"github.com/recipe-saver-golang/recipesvr/handlers"
 	"github.com/recipe-saver-golang/recipesvr/models/recipes"
 	"github.com/recipe-saver-golang/recipesvr/models/users"
 
@@ -79,6 +79,8 @@ func main() {
 		UserStore:   users.NewMongoStore(mgoSID),
 		RecipeStore: recipes.NewMongoStore(mgoSID),
 	}
+
+	fmt.Print(ctx)
 
 	http.HandleFunc("/", defaultMsg)
 	http.HandleFunc("/v1/recipes", recipesHander)

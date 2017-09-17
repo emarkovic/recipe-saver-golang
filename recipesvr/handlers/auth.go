@@ -9,6 +9,9 @@ func (ctx *Context) UsersHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid request method", http.StatusBadRequest)
 		return
 	}
+
+	w.Header().Add("Content-Type", "text/plain")
+	w.Write([]byte("you are trying to create a new user"))
 }
 
 // SessionsHandlers handles sign ins for existing users
@@ -18,4 +21,7 @@ func (ctx *Context) SessionsHandlers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid request method", http.StatusBadRequest)
 		return
 	}
+
+	w.Header().Add("Content-Type", "text/plain")
+	w.Write([]byte("you are trying to sign in"))
 }

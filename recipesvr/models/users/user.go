@@ -3,9 +3,19 @@ package users
 import (
 	"errors"
 	"net/mail"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+// ErrPasswordTooShort is returned when new user password is too short
+var ErrPasswordTooShort = errors.New("password is less than 6 characters")
+
+// ErrPasswordsDontMatch is returned when new user password and password confirmation do not match
+var ErrPasswordsDontMatch = errors.New("password and password confirmation do not match")
+
+// ErrMissingField is returned when new user did not provide all required fields
+var ErrMissingField = errors.New("required field is missing or empty")
 
 //UserID defines the type for user IDs
 type UserID string
@@ -34,19 +44,33 @@ type NewUser struct {
 	LastName     string `json:"lastName"`
 }
 
+func isBlank(str string) bool {
+	str = strings.TrimSpace(str)
+	return len(str) == 0
+}
+
 //Validate validates the email address and the password and password confirmation.
 func (nu *NewUser) Validate() error {
+	if isBlank(nu.Email) ||
+		isBlank(nu.Password) ||
+		isBlank(nu.PasswordConf) ||
+		isBlank(nu.FirstName) ||
+		isBlank(nu.LastName) {
+
+		return ErrMissingField
+	}
+
 	_, err := mail.ParseAddress(nu.Email)
 	if err != nil {
 		return err
 	}
 
 	if len(nu.Password) < 6 {
-		return errors.New("password is less than 6 characters")
+		return ErrPasswordTooShort
 	}
 
 	if nu.Password != nu.PasswordConf {
-		return errors.New("password and password confirmation do not match")
+		return ErrPasswordsDontMatch
 	}
 
 	return nil

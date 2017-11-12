@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"encoding/json"
 	"time"
 
 	redis "gopkg.in/redis.v5"
@@ -42,17 +43,54 @@ func NewRedisStore(client *redis.Client, sessionDuration time.Duration) *RedisSt
 
 // Save associates the provided state data with the provided sid in the store
 func (rs *RedisStore) Save(sid SessionID, state interface{}) error {
-	return nil
+	j, err := json.Marshal(state)
+	if err != nil {
+		return err
+	}
+
+	err = rs.Client.Set(sid.getRedisKey(), j, rs.SessionDuration).Err()
+
+	return err
 }
 
 // Get retrieves the previously saved state data for the session id,
 // and populates the `state` parameter with it. This will also
 // reset the data's time to live in the store.
 func (rs *RedisStore) Get(sid SessionID, state interface{}) error {
+	pipe := rs.Client.Pipeline()
+	sc := pipe.Get(sid.getRedisKey())
+	pipe.Expire(sid.getRedisKey(), rs.SessionDuration)
+
+	_, err := pipe.Exec()
+
+	if err == redis.Nil {
+		return ErrStateNotFound
+	} else if err != nil {
+		return err
+	}
+
+	data, err := sc.Bytes()
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(data, state)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // Delete deletes all state data associated with the session id from the store.
 func (rs *RedisStore) Delete(sid SessionID) error {
+	err := rs.Client.Del(sid.getRedisKey()).Err()
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func (sid SessionID) getRedisKey() string {
+	return redisKeyPrefix + sid.String()
 }

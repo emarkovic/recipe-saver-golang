@@ -1,5 +1,10 @@
 package sessions
 
+import (
+	"errors"
+	"time"
+)
+
 // DefaultSessionDuration is the default duration for
 // saving session data in the store. Most Store implementations
 // will automatically delete saved session data after this time.
